@@ -1,0 +1,6 @@
+# Servicio para obtener la posicion de un solo motor
+# Request
+uint8 id
+---
+# Response
+float32 position

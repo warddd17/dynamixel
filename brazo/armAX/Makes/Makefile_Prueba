@@ -1,0 +1,38 @@
+#Makefile para la compilacion de una prueba de la libreria
+
+# Configuración del compilador
+CXX := g++
+CXXFLAGS := -std=c++17 -Wall -I./include  # Busca headers en ./include
+LDFLAGS := -L./lib -lDynamixelAXControl -lDynamixelManager  -ldxl_x64_cpp    # Enlaza las bibliotecas en ./lib
+
+# Directorios
+SRC_DIR = src
+BUILD_DIR = build
+OBJ_DIR = obj
+
+# Archivos fuente y objetos (añade DynamixelManager.cpp si es necesario)
+SRCS = $(SRC_DIR)/armAX.cpp $(SRC_DIR)/prueba.cpp #$(SRC_DIR)/DynamixelManager.cpp
+OBJS = $(OBJ_DIR)/armAX.o $(OBJ_DIR)/prueba.o
+# Archivos fuente del proyecto
+
+# Nombre del ejecutable final
+TARGET := $(BUILD_DIR)/ejemplo
+
+.PHONY: all clean
+
+all: $(TARGET)
+
+# Compilar cada .cpp en un .o
+obj/%.o: src/%.cpp | obj
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Enlazar los .o con las bibliotecas
+$(TARGET): $(OBJS)
+	$(CXX) $^ -o $@ $(LDFLAGS)
+
+# Crear directorio obj si no existe
+obj:
+	mkdir -p obj
+
+clean:
+	rm -rf obj $(TARGET)
